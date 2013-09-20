@@ -1,35 +1,50 @@
 #aka marc2json
-import simplejson as json
 import couchdb
 from pymarc import MARCReader
 
 
 marc_decoded = {
+  '001' : 'BIBID',
+  '005' : 'Last_updated',
   '020' : 'ISBN',
   '022' : 'ISSN',
-  '050' : 'LC #',
+  '050' : 'Call#',
+  '099' : 'Call#',
   '100' : 'Author',
   '110' : 'Corporate',
   '111' : 'Conference',
-  '130' : 'Uniform title',
-  '240' : 'Uniform title',
-  '245' : 'Title proper',
-  '246' : 'Distinctive Subtitle',
+  '130' : 'Uniform_title',
+  '240' : 'Uniform_title',
+  '245' : 'Title_proper',
+  '246' : 'Subtitle',
   '250' : 'Edition',
-  '260' : 'Publishing info',
-  '500' : 'General Notes',
-  '508' : 'Motion picture credits',
+  '260' : 'Publishing_info',
+  '300' : 'Details',
+  '440' : 'Series',
+  '490' : 'Series',
+  '500' : 'Notes',
+  '504' : 'Notes',
+  '505' : 'TOC',
   '511' : 'Participants',
-  '520' : 'AV Summary',
-  '600' : 'Person subject',
-  '610' : 'Corporate subject',
-  '611' : 'Corporate subject',
+  '520' : 'Description',
+  '530' : 'Notes',
+  '590' : 'Notes',
+  '600' : 'Subject',
+  '610' : 'Subject',
+  '611' : 'Subject',
+  '650' : 'Subject',
+  '651' : 'Subject',
   '655' : 'Genre',
   '700' : 'Person',
+  '710' : 'Additional_Corporate_Author',
+  '740' : 'Subtitle',
+  '856' : 'URL',
+  '930' : 'Holdings',
+  '970' : 'TOC',
 }
 server = couchdb.Server()
-db = server['dcat']
-filename = '/Users/alexlemann/Desktop/ballstatecat.mrc'
+db = server['brock']
+filename = 'March25'
 fd = open(filename, 'rU')
 reader = MARCReader(fd, to_unicode=True)
 cnt = 0
@@ -42,6 +57,6 @@ for r in reader:
     if marc_decoded.has_key(f.tag):
       field = marc_decoded[f.tag]
       marcjson.setdefault(field, [])
-      marcjson[field].append(f.value())
+      marcjson[field].append(f.value().rstrip(' .-,;:'))
   #print marcjson
   db.save(marcjson)
