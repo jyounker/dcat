@@ -1,18 +1,18 @@
 #first run:
 #  plugin install river-couchdb
-curl -XDELETE 'http://localhost:9200/dcat/'
+curl -XDELETE 'http://localhost:9200/brock/'
 curl -XDELETE 'http://localhost:9200/_river/'
-curl -XPUT 'localhost:9200/_river/dcat/_meta' -d '{
+curl -XPUT 'localhost:9200/_river/brock/_meta' -d '{
     "type" : "couchdb",
     "couchdb" : {
         "host" : "localhost",
         "port" : 5984,
-        "db" : "dcat",
+        "db" : "brock",
         "filter" : null
     },
     "index" : {
-        "index" : "dcat",
-        "type" : "dcat",
+        "index" : "brock",
+        "type" : "brock",
         "bulk_size" : "100",
         "bulk_timeout" : "10ms"
     }
